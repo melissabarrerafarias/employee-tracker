@@ -18,5 +18,15 @@ VALUES
 ("Booking", 30.65, 3),
 ("Manager", 20.1, 1);
 
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES 
+("Michael", "Kumar", 5, 1),
+("Cecilia", "Sobol", 1, 2),
+("Emilia", "Paulsen", 3, 3), 
+("Kaitlin", "Van", 4, 4), 
+("Maria", "Cary", 6, 5), 
+("George", "Sanchez", 2, 6),
+("Kyle", "Tran", 7, 7);
+
 
 
