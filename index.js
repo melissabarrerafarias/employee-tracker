@@ -1,4 +1,12 @@
 const inquirer = require('inquirer');
+const mysql = require('mysql2');
+const cTable = require('console.table');
+
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    database: 'business_db'
+  });
 
 function promptUser() {
     inquirer.prompt(
@@ -22,3 +30,6 @@ function promptUser() {
 }
 
 promptUser();
+
+
+// to start the mysql server run 'mysql -u root -p' and then do source db/schema.sql and to check do 'show databases;' and 'show tables;'
