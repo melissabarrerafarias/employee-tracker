@@ -65,6 +65,16 @@ function executeRequest(res) {
     else if (res === "Add a Role") {
         addRole();
     }
+
+    else if (res === "Add an Employee") {
+        addEmployee();
+    }
+    else if (res === "Update an existing employee role") {
+        updateEmployeeRole();
+    }
+    else if (res === "Exit") {
+        exitApp();
+    }
 }
 
 function viewDepartments() {
@@ -98,7 +108,7 @@ function viewEmployees() {
 }
 
 function addDepartment() {
-    console.log("Adding Department...");
+    console.log("Getting ready to add a department...");
     inquirer.prompt(
         {
             type: "input",
@@ -124,24 +134,24 @@ function addDepartment() {
 };
 
 function addRole() {
-    console.log("Adding a role...");
-    inquirer.prompt(
+    console.log("Getting ready to add a role...");
+    inquirer.prompt([
         {
-          type: "input", 
-          name: "title", 
-          message: "What is the title of the role?", 
-          validate: titleInput => {
-            if (titleInput) {
-                return true;
+            type: "input",
+            name: "title",
+            message: "What is the title of the role?",
+            validate: titleInput => {
+                if (titleInput) {
+                    return true;
+                }
+                else {
+                    console.log("Please enter the role's title");
+                }
             }
-            else {
-                console.log("Please enter the role's title");
-            }
-        }
-        }, 
+        },
         {
-            type: "input", 
-            name: "salary", 
+            type: "input",
+            name: "salary",
             message: "What is this role's salary?",
             validate: salaryInput => {
                 if (salaryInput) {
@@ -151,11 +161,11 @@ function addRole() {
                     console.log('Please enter the salary');
                 }
             }
-        }, 
+        },
         {
-            type: "input", 
-            name: "dept_id", 
-            message: "Enter the department ID?", 
+            type: "input",
+            name: "dept_id",
+            message: "Enter the department ID?",
             validate: idInput => {
                 if (idInput) {
                     return true;
@@ -164,21 +174,88 @@ function addRole() {
                     console.log('Please enter the department ID this role belongs to');
                 }
             }
-        }).then(function (answers) {
-            connection.query("INSERT INTO role SET ?", 
-            {
-                title: answers.title, 
-                salary: answers.salary, 
-                department_id: answers.dept_id
-            },
-            function (err, res) {
-                if (err) throw err;
-                console.log("Role added!");
-                returnMenu();
-            });
+        }]).then(function (answers) {
+            connection.query("INSERT INTO role SET ?",
+                {
+                    title: answers.title,
+                    salary: answers.salary,
+                    department_id: answers.dept_id
+                },
+                function (err, res) {
+                    if (err) throw err;
+                    console.log("Role added!");
+                    returnMenu();
+                });
         })
+};
+
+function addEmployee() {
+    console.log("Getting ready to add an employee...");
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "first_name",
+            message: "Please enter the employee's first name: ",
+            validate: firstNameInput => {
+                if (firstNameInput) {
+                    return true;
+                }
+                else {
+                    console.log("Please enter the employee's first name");
+                }
+            }
+        },
+        {
+            type: "input", 
+            name: "last_name", 
+            message: "Please enter the employee's last name: ", 
+            validate: lastNameInput => {
+                if (lastNameInput) {
+                    return true;
+                }
+                else {
+                    console.log("Please enter the employee's last name: ");
+                }
+            }
+        }, 
+        {
+            type: "input", 
+            name: "role_id", 
+            message: "What is the ID of this employee's role?",
+            validate: roleInput => {
+                if (roleInput) {
+                    return true;
+                }
+                else {
+                    console.log("Please enter the employee's last name: ");
+                }
+            }
+        }, 
+        {
+            type: "input", 
+            name: "manager_id", 
+            message: "What is the ID of this employee's manager?"
+        }
+    ]).then(function (answers) {
+        connection.query("INSERT INTO employee SET ?", 
+        {
+            first_name: answers.first_name, 
+            last_name: answers.last_name, 
+            role_id: answers.role_id, 
+            manager_id: answers.manager_id
+        },
+        function (err, res) {
+            if (err) throw err; 
+            console.log("Employee added!");
+            returnMenu();
+        }
+        )
+    })
 }
 
+// function updateEmployeeRole() {
+
+// }
 
 
 function returnMenu() {
