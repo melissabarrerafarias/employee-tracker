@@ -253,9 +253,22 @@ function addEmployee() {
     })
 }
 
-// function updateEmployeeRole() {
-
-// }
+function updateEmployeeRole() {
+    console.log("Updating employee..."); 
+    inquirer.prompt([
+        {
+            type: "list", 
+            name: "update_employee", 
+            message: "Which employee would you like to update?", 
+            choices: [] // [employees inserted],
+        }, 
+        {
+            type: "input", 
+            name: "new_role", 
+            message: "What is this employee's new role?",
+        }, 
+    ])
+}
 
 
 function returnMenu() {
