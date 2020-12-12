@@ -19,6 +19,7 @@ connection.connect(function (err) {
     }
 
     console.log("Connected to the database!");
+
     promptUser();
 });
 
@@ -40,7 +41,6 @@ function promptUser() {
             ],
         }
     ).then(function (answers) {
-        console.log(answers);
         executeRequest(answers.choices);
     });
 }
@@ -99,7 +99,7 @@ function viewRoles() {
 
 function viewEmployees() {
     console.log("Viewing all Employees");
-    connection.query("SELECT * FROM employee",
+    connection.query("SELECT * FROM role LEFT JOIN employee ON employee.role_id = role.id;",
         function (err, res) {
             if (err) throw err;
             console.table(res);
@@ -166,14 +166,6 @@ function addRole() {
             type: "input",
             name: "dept_id",
             message: "Enter the department ID?",
-            validate: idInput => {
-                if (idInput) {
-                    return true;
-                }
-                else {
-                    console.log('Please enter the department ID this role belongs to');
-                }
-            }
         }]).then(function (answers) {
             connection.query("INSERT INTO role SET ?",
                 {
@@ -257,17 +249,24 @@ function updateEmployeeRole() {
     console.log("Updating employee..."); 
     inquirer.prompt([
         {
-            type: "list", 
-            name: "update_employee", 
-            message: "Which employee would you like to update?", 
-            choices: [] // [employees inserted],
+            type: "input", 
+            name: "updateEmployee", 
+            message: "What is the ID of the employee you would like to update?", 
         }, 
         {
             type: "input", 
-            name: "new_role", 
-            message: "What is this employee's new role?",
+            name: "newRole", 
+            message: "What is the ID of the new role for this employee?",
         }, 
-    ])
+    ]).then(function (answers) {
+        connection.query("UPDATE employee SET role_id = ? WHERE id = ?", 
+        [answers.newRole, answers.updateEmployee],
+        function (err, res) {
+            if (err) throw err; 
+            console.log("Employee updated!");
+            returnMenu();
+        })
+    })
 }
 
 
